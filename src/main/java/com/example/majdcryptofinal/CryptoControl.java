@@ -22,13 +22,11 @@ import java.util.concurrent.CompletableFuture;
 import static java.lang.Integer.parseInt;
 
 public class CryptoControl implements Initializable{
-
+    //Tabs
     @FXML
     private Tab DayTab;
-
     @FXML
     private Tab HourTab;
-
     @FXML
     private Tab MinTab;
 
@@ -38,17 +36,19 @@ public class CryptoControl implements Initializable{
     @FXML
     private LineChart<String, Float> dayChart;
 
+    //Hour Chart Elements
     @FXML
     private LineChart<String, Float> hourChart;
     @FXML
     private NumberAxis hourPriceAxis;
+    @FXML
+    private CategoryAxis hourdataAxis;
 
+    //Minute Chart Elements
     @FXML
     public LineChart<String, Float> minChart;
-
     @FXML
     private NumberAxis priceAxis;
-
     @FXML
     private CategoryAxis dataAxis;
 
@@ -77,6 +77,7 @@ public class CryptoControl implements Initializable{
 
     public void preDrawHour(){
         //Setting up the chart properties
+        hourdataAxis.toNumericValue("d");
         hourPriceAxis.setAutoRanging(false);
         hourPriceAxis.setLowerBound(BtcHour.minVal-20);
         hourPriceAxis.setUpperBound(BtcHour.maxVal+20);
@@ -89,6 +90,7 @@ public class CryptoControl implements Initializable{
         //XY series to be passed to the chart later
         XYChart.Series<String, Float> series = new XYChart.Series<>();
         ObservableList<BtcMinute> values=BtcMinute.getMinute();
+        float nextTime=0;
         for(BtcMinute bt:values){
             String time=bt.getTime();
             float prices[]={bt.getOpen(), bt.getLow(), bt.getHigh(), bt.getClose()};
@@ -103,20 +105,17 @@ public class CryptoControl implements Initializable{
             time=formattedDate;
             int timeToDiv=parseInt(time);       //converstion of the time to a float
             float firstTime=(float) timeToDiv;  //float casted
-            float nextTime=firstTime+1;         //Used to divide the time and plot Low & high
+            nextTime=firstTime+1;         //Used to divide the time and plot Low & high
 
-            //Used to Plot the data on the category axis
-            int j=0;
-
-            while(firstTime<nextTime){
+            for(int i=0;i<3;i++){
                 String chartTime=String.valueOf(firstTime);
-                Float value=prices[j];
+                Float value=prices[i];
 //                System.out.println(String.format("%-5s %-10f",chartTime,value));
                 series.getData().add(new XYChart.Data<String, Float>(chartTime, value));
-                firstTime+=0.25;
-                j+=1;
+                firstTime+=0.3;
             }
         }
+        series.getData().add(new XYChart.Data<String, Float>(String.valueOf(nextTime),BtcMinute.lastVal));
         return series;
     }
 
@@ -125,6 +124,7 @@ public class CryptoControl implements Initializable{
 //        System.out.println("HOUR DATA:");
         XYChart.Series<String, Float> series = new XYChart.Series<>();
         ObservableList<BtcHour> values=BtcHour.getHour();
+        float nextTime=0;
         for(BtcHour bt:values){
             String time=bt.getTime();
             float prices[]={bt.getOpen(), bt.getLow(), bt.getHigh(), bt.getClose()};
@@ -133,27 +133,25 @@ public class CryptoControl implements Initializable{
             int unixHours=parseInt(time);
             Date date = new java.util.Date(unixHours*1000L);
             SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH");
-            sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC+0"));
+            sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT-8"));
             String formattedDate = sdf.format(date);
 
             time=formattedDate;
-            System.out.println(formattedDate);
+
             int timeToDiv=parseInt(time);       //converstion of the time to a float
             float firstTime=(float) timeToDiv;  //float casted
-            float nextTime=firstTime+1;         //Used to divide the time and plot Low & high
-            System.out.println(nextTime);
-            //Used to Plot the data on the category axis
-            int j=0;
+            nextTime=firstTime+1;         //Used to divide the time and plot Low & high
 
-            while(firstTime<nextTime){
+            for(int i=0;i<3;i++){
                 String chartTime=String.valueOf(firstTime);
-                Float value=prices[j];
-//                System.out.println(String.format("%-5s %-10f",chartTime,value));
+                Float value=prices[i];
+                System.out.println(String.format("%-5s %-10f", chartTime, value));
                 series.getData().add(new XYChart.Data<String, Float>(chartTime, value));
-                firstTime+=0.25;
-                j+=1;
+                firstTime+=0.3;
             }
+
         }
+        series.getData().add(new XYChart.Data<String, Float>(String.valueOf(nextTime),BtcHour.lastVal));
         return series;
     }
 
@@ -179,6 +177,7 @@ public class CryptoControl implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         preDrawMin();
+        preDrawHour();
         doMinLoad();
         doHourLoad();
     }

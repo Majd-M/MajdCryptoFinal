@@ -38,7 +38,10 @@
                      <children>
                         <LineChart fx:id="hourChart" createSymbols="false" horizontalGridLinesVisible="false" layoutX="86.0" layoutY="-61.0" legendVisible="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" />
+                            <CategoryAxis fx:id="hourdataAxis" side="BOTTOM">
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor></CategoryAxis>
                           </xAxis>
                           <yAxis>
                             <NumberAxis fx:id="hourPriceAxis" side="LEFT" />
