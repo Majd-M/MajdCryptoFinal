@@ -15,6 +15,7 @@ public class CryptoApp extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
+        BtcMinute.getMinute();
     }
 
     public static void main(String[] args) {
