@@ -15,7 +15,7 @@ public class CryptoApp extends Application {
         stage.setTitle("BitCoin Price Viewer");
         stage.setScene(scene);
         stage.show();
-        BtcMinute.getMinute();
+
 
     }
 
