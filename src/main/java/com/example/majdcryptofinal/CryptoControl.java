@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static java.lang.Integer.parseInt;
 
-public class CryptoControl {
+public class CryptoControl implements Initializable{
 
     @FXML
     private Tab DayTab;
@@ -36,10 +36,10 @@ public class CryptoControl {
     public Label currPriceLabel;
 
     @FXML
-    private LineChart<?, ?> dayChart;
+    private LineChart<String, Float> dayChart;
 
     @FXML
-    private LineChart<?, ?> hourChart;
+    private LineChart<String, Float> hourChart;
 
     @FXML
     public LineChart<String, Float> minChart;
@@ -51,32 +51,32 @@ public class CryptoControl {
     private CategoryAxis dataAxis;
 
 
-    @FXML
-    public void doLoad(){
-        /* Draw as much as possible before going Async */
-        preDraw();
+
+    public void doMinLoad(){
+        preDrawMin();
         CompletableFuture<ObservableList<BtcMinute>> future = new CompletableFuture<>();
-        future.supplyAsync(this::setupChart).thenAccept(this::drawChart);
+        future.supplyAsync(this::setupMinChart).thenAccept(this::drawMinChart);
     }
 
-    public void preDraw(){
+    public void preDrawMin(){
+        //Setting up the chart properties
         priceAxis.setAutoRanging(false);
         priceAxis.setLowerBound(BtcMinute.minVal-5);
         priceAxis.setUpperBound(BtcMinute.maxVal+5);
-        dataAxis.toNumericValue("d");
+        priceAxis.setTickUnit(5);
+        dataAxis.setAnimated(true);
         minChart.setAnimated(true);
     }
 
-    public XYChart.Series<String, Float> setupChart(){
-
+    public XYChart.Series<String, Float> setupMinChart(){
+        //XY series to be passed to the chart later
         XYChart.Series<String, Float> series = new XYChart.Series<>();
         ObservableList<BtcMinute> values=BtcMinute.getMinute();
         for(BtcMinute bt:values){
-
             String time=bt.getTime();
             float prices[]={bt.getOpen(), bt.getLow(), bt.getHigh(), bt.getClose()};
 
-            //Converting Unix time
+            //Converting Unix time to Minutes for dsiplay and data plotting
             int unixMinutes=parseInt(time);
             Date date = new java.util.Date(unixMinutes*1000L);
             SimpleDateFormat sdf = new java.text.SimpleDateFormat("mm");
@@ -84,14 +84,13 @@ public class CryptoControl {
             String formattedDate = sdf.format(date);
 
             time=formattedDate;
+            int timeToDiv=parseInt(time);       //converstion of the time to a float
+            float firstTime=(float) timeToDiv;  //float casted
+            float nextTime=firstTime+1;         //Used to divide the time and plot Low & high
 
-
-            int timeToDiv=parseInt(time);
-            float firstTime=(float) timeToDiv;
-            float nextTime=firstTime+1;
-
-
+            //Used to Plot the data on the category axis
             int j=0;
+
             while(firstTime<nextTime){
                 String chartTime=String.valueOf(firstTime);
                 Float value=prices[j];
@@ -101,19 +100,22 @@ public class CryptoControl {
                 j+=1;
             }
         }
-
         return series;
     }
 
-    public void drawChart(XYChart.Series<String, Float> series){
+    public void drawMinChart(XYChart.Series<String, Float> series){
         Platform.runLater(()->{
+            //Set the Current time
             String priceFormat=String.format("$%-10s",String.valueOf(BtcMinute.lastVal));
             currPriceLabel.setText(priceFormat);
             minChart.getData().setAll(series);
         });
-
-
     }
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        preDrawMin();
+        doMinLoad();
+    }
 }
