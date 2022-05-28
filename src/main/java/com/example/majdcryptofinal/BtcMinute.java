@@ -11,38 +11,44 @@ import javafx.collections.ObservableList;
 
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class BtcMinute {
 
-    private IntegerProperty time;
+    private StringProperty time;
     private FloatProperty open;
     private FloatProperty low;
     private FloatProperty high;
     private FloatProperty close;
+    public static float minVal;
+    public static float maxVal;
 
 
-    public BtcMinute(int time, float open, float low, float high, float close){
-        this.time = new SimpleIntegerProperty(this, "year");
+
+    public BtcMinute(String time, float open, float low, float high, float close){
+        this.time = new SimpleStringProperty(this, "year");
         this.open = new SimpleFloatProperty(this, "open");
         this.low = new SimpleFloatProperty(this, "low");
         this.high = new SimpleFloatProperty(this, "high");
         this.close = new SimpleFloatProperty(this, "close");
         this.setTime(time);
         this.setOpen(open);
-        this.setlow(low);
+        this.setLow(low);
         this.setHigh(high);
         this.setClose(close);
     }
 
-    public int getTime() {  return time.get(); }
-    public void setTime(int time) {this.time.set(time);}
+    public String getTime() {  return time.get(); }
+    public void setTime(String time) {this.time.set(time);}
 
     public float getOpen() {  return open.get(); }
     public void setOpen(float _open) {this.open.set(_open);
     }
 
-    public float getlow() {  return low.get(); }
-    public void setlow(float _low) {this.low.set(_low);
+    public float getLow() {  return low.get(); }
+    public void setLow(float _low) {this.low.set(_low);
     }
 
     public float getHigh() {  return high.get(); }
@@ -67,17 +73,14 @@ public class BtcMinute {
             JsonElement element= data.get(0);
             JsonObject object=element.getAsJsonObject();
 
-//            System.out.println(root);
-//            System.out.println(data);
-//            System.out.println(element);
-//            System.out.println(object);
-//            System.out.println(object.get("time"));
+            List<Float> priceComp=new ArrayList<>();
+
             ObservableList<BtcMinute> minValues=FXCollections.observableArrayList();
             for(int i=0;i<=10;i++){
                 JsonElement el=data.get(i);
                 JsonObject ob=el.getAsJsonObject();
 
-                Integer time=ob.get("time").getAsInt();
+                String time=ob.get("time").getAsString();
                 Float open=ob.get("open").getAsFloat();
                 Float low=ob.get("low").getAsFloat();
                 Float high=ob.get("high").getAsFloat();
@@ -85,22 +88,23 @@ public class BtcMinute {
 
                 minValues.add(new BtcMinute(time,open,low,high,close));
 
-                String fromatted=String.format("Time:%-15d Open:%-15f Low:%-15f High:%-15f Close:%-15f ",
+                priceComp.add(open);
+                priceComp.add(low);
+                priceComp.add(high);
+                priceComp.add(close);
+
+
+                String fromatted=String.format("Time:%-15s Open:%-15f Low:%-15f High:%-15f Close:%-15f ",
                         time,open,low,high,close);
                 System.out.println(fromatted);
             }
 
+            minVal=Collections.min(priceComp);
+            maxVal= Collections.max(priceComp);
+            System.out.println(String.format("Min: %-10f Max: %-10f",minVal,maxVal));
 
-//            Set<Map.Entry<String, JsonElement>> entrySet = data.entrySet();
-//            for(Map.Entry<String,JsonElement> entry : entrySet){
-//                String raw_year = entry.getKey();
-//                String year = raw_year.substring(0, 4);
-//                String month = raw_year.substring(4, 6);
-//                Float value = entry.getValue().getAsFloat();
-////                values.add(new BtcMinute(year, month, value));
-//            }
-            System.out.println();
             return minValues;
+
         } catch (Exception e) {
             e.printStackTrace();
         }

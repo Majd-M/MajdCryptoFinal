@@ -3,12 +3,22 @@ package com.example.majdcryptofinal;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
+
+import static java.lang.Integer.parseInt;
 
 public class CryptoControl {
 
@@ -31,48 +41,69 @@ public class CryptoControl {
     private LineChart<?, ?> hourChart;
 
     @FXML
-    LineChart<Integer, Float> minChart;
+    public LineChart<String, Float> minChart;
 
+    @FXML
+    private NumberAxis priceAxis;
 
+    @FXML
     public void doLoad(){
         /* Draw as much as possible before going Async */
         preDraw();
         CompletableFuture<ObservableList<BtcMinute>> future = new CompletableFuture<>();
         future.supplyAsync(this::setupChart).thenAccept(this::drawChart);
-
     }
 
     public void preDraw(){
-        MinTab.getGraphic();
-        minChart.getXAxis().setLabel("time");
-        minChart.getYAxis().setLabel("open");
+        priceAxis.setAutoRanging(false);
+        priceAxis.setLowerBound(BtcMinute.minVal-5);
+        priceAxis.setUpperBound(BtcMinute.maxVal+5);
+        minChart.setAnimated(true);
     }
 
-    public XYChart.Series<Integer, Float> setupChart(){
+    public XYChart.Series<String, Float> setupChart(){
 
-        XYChart.Series<Integer, Float> series = new XYChart.Series<>();
+        XYChart.Series<String, Float> series = new XYChart.Series<>();
         ObservableList<BtcMinute> values=BtcMinute.getMinute();
         for(BtcMinute bt:values){
-            Integer time=bt.getTime();
-            Float open=bt.getOpen();
-            series.getData().add(new XYChart.Data<Integer,Float>(time,open));
+
+            String time=bt.getTime();
+            float prices[]={bt.getOpen(), bt.getLow(), bt.getHigh(), bt.getClose()};
+
+            //Converting Unix time
+            int unixMinutes=parseInt(time);
+            Date date = new java.util.Date(unixMinutes*1000L);
+            SimpleDateFormat sdf = new java.text.SimpleDateFormat("mm");
+            sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+8"));
+            String formattedDate = sdf.format(date);
+
+            time=formattedDate;
+
+            int timeToDiv=parseInt(time);
+            float firstTime=(float) timeToDiv;
+            float nextTime=firstTime+1;
+
+            int j=0;
+            while(firstTime<nextTime){
+                String chartTime=String.valueOf(firstTime);
+                Float value=prices[j];
+                System.out.println(String.format("%-5s %-10f",chartTime,value));
+                series.getData().add(new XYChart.Data<String,Float>(chartTime,value));
+                firstTime+=0.25;
+                j+=1;
+            }
         }
 
-        //*********Using this as placeholder***************
-        XYChart.Series<Integer, Float> data=new XYChart.Series<>();
-        data.getData().add(new XYChart.Data<Integer,Float>(1, (float) 6789.0009));
-        data.getData().add(new XYChart.Data<Integer,Float>(2, (float) 7892.0009));
-        data.getData().add(new XYChart.Data<Integer,Float>(3, (float) 890.0009));
-        data.getData().add(new XYChart.Data<Integer,Float>(4, (float) 123.0009));
-        data.getData().add(new XYChart.Data<Integer,Float>(5, (float) 789.0009));
-
-
-        return data;
+        return series;
     }
 
-    public void drawChart(XYChart.Series<Integer, Float> series){
+    public void drawChart(XYChart.Series<String, Float> series){
         Platform.runLater(()->{
             minChart.getData().setAll(series);
         });
+
+
     }
+
+
 }

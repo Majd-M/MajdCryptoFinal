@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -17,16 +18,18 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="305.0" prefWidth="497.0">
                      <children>
-                        <LineChart fx:id="minCHart" horizontalGridLinesVisible="false" layoutX="58.0" layoutY="-58.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <LineChart fx:id="minChart" animated="false" axisSortingPolicy="NONE" horizontalGridLinesVisible="false" layoutX="27.0" layoutY="40.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" />
+                            <NumberAxis fx:id="priceAxis" side="LEFT" />
                           </yAxis>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
                         </LineChart>
-                     </children>
-                  </AnchorPane>
+                     </children></AnchorPane>
             </content>
           </Tab>
           <Tab fx:id="HourTab" text="Hour">
