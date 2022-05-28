@@ -46,6 +46,7 @@ public class BtcMinute {
             }
 
 
+
             ObservableList<BtcMinute> values = FXCollections.observableArrayList();
 
 //            Set<Map.Entry<String, JsonElement>> entrySet = data.entrySet();
