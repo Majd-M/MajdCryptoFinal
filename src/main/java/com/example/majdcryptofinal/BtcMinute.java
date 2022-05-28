@@ -24,6 +24,7 @@ public class BtcMinute {
     private FloatProperty close;
     public static float minVal;
     public static float maxVal;
+    public static float lastVal;
 
 
 
@@ -101,6 +102,7 @@ public class BtcMinute {
 
             minVal=Collections.min(priceComp);
             maxVal= Collections.max(priceComp);
+            lastVal=priceComp.get(priceComp.size()-1);
             System.out.println(String.format("Min: %-10f Max: %-10f",minVal,maxVal));
 
             return minValues;

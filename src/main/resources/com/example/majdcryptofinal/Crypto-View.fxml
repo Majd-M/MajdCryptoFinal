@@ -10,17 +10,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.majdcryptofinal.CryptoControl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="639.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.majdcryptofinal.CryptoControl">
    <children>
-      <TabPane layoutY="53.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="348.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="-3.0" layoutY="47.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="392.0" prefWidth="639.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
         <tabs>
           <Tab fx:id="MinTab" onSelectionChanged="#doLoad" text="Min">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="305.0" prefWidth="497.0">
                      <children>
-                        <LineChart fx:id="minChart" animated="false" axisSortingPolicy="NONE" horizontalGridLinesVisible="false" layoutX="27.0" layoutY="40.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <LineChart fx:id="minChart" alternativeColumnFillVisible="true" alternativeRowFillVisible="false" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="27.0" layoutY="40.0" legendVisible="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" verticalZeroLineVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" />
+                            <CategoryAxis fx:id="dataAxis" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
                             <NumberAxis fx:id="priceAxis" side="LEFT" />

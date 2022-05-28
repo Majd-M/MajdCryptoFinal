@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -47,6 +48,10 @@ public class CryptoControl {
     private NumberAxis priceAxis;
 
     @FXML
+    private CategoryAxis dataAxis;
+
+
+    @FXML
     public void doLoad(){
         /* Draw as much as possible before going Async */
         preDraw();
@@ -58,6 +63,7 @@ public class CryptoControl {
         priceAxis.setAutoRanging(false);
         priceAxis.setLowerBound(BtcMinute.minVal-5);
         priceAxis.setUpperBound(BtcMinute.maxVal+5);
+        dataAxis.toNumericValue("d");
         minChart.setAnimated(true);
     }
 
@@ -79,16 +85,18 @@ public class CryptoControl {
 
             time=formattedDate;
 
+
             int timeToDiv=parseInt(time);
             float firstTime=(float) timeToDiv;
             float nextTime=firstTime+1;
+
 
             int j=0;
             while(firstTime<nextTime){
                 String chartTime=String.valueOf(firstTime);
                 Float value=prices[j];
                 System.out.println(String.format("%-5s %-10f",chartTime,value));
-                series.getData().add(new XYChart.Data<String,Float>(chartTime,value));
+                series.getData().add(new XYChart.Data<String, Float>(chartTime, value));
                 firstTime+=0.25;
                 j+=1;
             }
@@ -99,6 +107,8 @@ public class CryptoControl {
 
     public void drawChart(XYChart.Series<String, Float> series){
         Platform.runLater(()->{
+            String priceFormat=String.format("$%-10s",String.valueOf(BtcMinute.lastVal));
+            currPriceLabel.setText(priceFormat);
             minChart.getData().setAll(series);
         });
 
