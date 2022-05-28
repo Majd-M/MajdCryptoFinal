@@ -32,16 +32,16 @@
                      </children></AnchorPane>
             </content>
           </Tab>
-          <Tab fx:id="HourTab" text="Hour">
+          <Tab fx:id="HourTab" onSelectionChanged="#doHourLoad" text="Hour">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <LineChart fx:id="hourChart" horizontalGridLinesVisible="false" layoutX="86.0" layoutY="-61.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <LineChart fx:id="hourChart" createSymbols="false" horizontalGridLinesVisible="false" layoutX="86.0" layoutY="-61.0" legendVisible="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" />
+                            <NumberAxis fx:id="hourPriceAxis" side="LEFT" />
                           </yAxis>
                         </LineChart>
                      </children>
