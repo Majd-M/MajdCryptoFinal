@@ -55,7 +55,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="305.0" prefWidth="497.0">
                      <children>
-                        <LineChart fx:id="dayChart" alternativeRowFillVisible="false" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="86.0" layoutY="-66.0" legendVisible="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" verticalGridLinesVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <LineChart fx:id="dayChart" alternativeRowFillVisible="false" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="86.0" layoutY="-66.0" legendVisible="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
                             <CategoryAxis fx:id="dayDataAxis" side="BOTTOM" />
                           </xAxis>
