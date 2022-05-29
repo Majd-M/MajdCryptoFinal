@@ -60,12 +60,12 @@ public class CryptoControl implements Initializable{
     private CategoryAxis minDataAxis;
 
 
-
     public void doMinLoad(){
         preDrawMin();
         CompletableFuture<ObservableList<BtcMinute>> minfuture = new CompletableFuture<>();
         minfuture.supplyAsync(this::setupMinChart).thenAccept(this::drawMinChart);
     }
+
     public void doHourLoad(){
         preDrawHour();
         CompletableFuture<ObservableList<BtcHour>> hourFuture = new CompletableFuture<>();
@@ -245,7 +245,6 @@ public class CryptoControl implements Initializable{
             dayChart.getData().setAll(series);
         });
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
