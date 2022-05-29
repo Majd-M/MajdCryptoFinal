@@ -20,10 +20,10 @@
                      <children>
                         <LineChart fx:id="minChart" alternativeColumnFillVisible="true" alternativeRowFillVisible="false" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="27.0" layoutY="40.0" legendVisible="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" verticalZeroLineVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
-                            <CategoryAxis fx:id="dataAxis" side="BOTTOM" />
+                            <CategoryAxis fx:id="minDataAxis" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis fx:id="priceAxis" side="LEFT" />
+                            <NumberAxis fx:id="minPriceAxis" side="LEFT" />
                           </yAxis>
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
@@ -51,16 +51,16 @@
                   </AnchorPane>
             </content>
           </Tab>
-            <Tab fx:id="DayTab" text="Day">
+            <Tab fx:id="DayTab" onSelectionChanged="#doDayLoad" text="Day">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="305.0" prefWidth="497.0">
                      <children>
-                        <LineChart fx:id="dayChart" horizontalGridLinesVisible="false" layoutX="86.0" layoutY="-66.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <LineChart fx:id="dayChart" alternativeRowFillVisible="false" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="86.0" layoutY="-66.0" legendVisible="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="316.5" prefWidth="600.0" verticalGridLinesVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" />
+                            <CategoryAxis fx:id="dayDataAxis" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" />
+                            <NumberAxis fx:id="dayPriceAxis" side="LEFT" />
                           </yAxis>
                         </LineChart>
                      </children>

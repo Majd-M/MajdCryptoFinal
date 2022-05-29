@@ -35,6 +35,11 @@ public class CryptoControl implements Initializable{
 
     @FXML
     private LineChart<String, Float> dayChart;
+    @FXML
+    private CategoryAxis dayDataAxis;
+
+    @FXML
+    private NumberAxis dayPriceAxis;
 
     //Hour Chart Elements
     @FXML
@@ -48,9 +53,9 @@ public class CryptoControl implements Initializable{
     @FXML
     public LineChart<String, Float> minChart;
     @FXML
-    private NumberAxis priceAxis;
+    private NumberAxis minPriceAxis;
     @FXML
-    private CategoryAxis dataAxis;
+    private CategoryAxis minDataAxis;
 
 
 
@@ -61,29 +66,45 @@ public class CryptoControl implements Initializable{
     }
     public void doHourLoad(){
         preDrawHour();
-        CompletableFuture<ObservableList<BtcHour>> hourfuture = new CompletableFuture<>();
-        hourfuture.supplyAsync(this::setupHourChart).thenAccept(this::drawHourChart);
+        CompletableFuture<ObservableList<BtcHour>> hourFuture = new CompletableFuture<>();
+        hourFuture.supplyAsync(this::setupHourChart).thenAccept(this::drawHourChart);
+    }
+
+    public void doDayLoad(){
+        preDrawDay();
+        CompletableFuture<ObservableList<BtcDay>> dayFuture = new CompletableFuture<>();
+        dayFuture.supplyAsync(this::setupDayChart).thenAccept(this::drawDayChart);
     }
 
     public void preDrawMin(){
         //Setting up the chart properties
-        priceAxis.setAutoRanging(false);
-        priceAxis.setLowerBound(BtcMinute.minVal-5);
-        priceAxis.setUpperBound(BtcMinute.maxVal+5);
-        priceAxis.setTickUnit(5);
-        dataAxis.setAnimated(true);
+        minDataAxis.setAnimated(true);
+        minPriceAxis.setAutoRanging(false);
+        minPriceAxis.setLowerBound(BtcMinute.minVal-5);
+        minPriceAxis.setUpperBound(BtcMinute.maxVal+5);
+        minPriceAxis.setTickUnit(5);
+        minPriceAxis.setAnimated(true);
         minChart.setAnimated(true);
     }
 
     public void preDrawHour(){
         //Setting up the chart properties
-        hourdataAxis.toNumericValue("d");
         hourPriceAxis.setAutoRanging(false);
         hourPriceAxis.setLowerBound(BtcHour.minVal-20);
         hourPriceAxis.setUpperBound(BtcHour.maxVal+20);
         hourPriceAxis.setTickUnit(5);
         hourPriceAxis.setAnimated(true);
-        minChart.setAnimated(true);
+        hourChart.setAnimated(true);
+    }
+
+    public void preDrawDay(){
+        //Setting up the chart properties
+        dayPriceAxis.setAutoRanging(false);
+        dayPriceAxis.setLowerBound(BtcDay.minVal-100);
+        dayPriceAxis.setUpperBound(BtcDay.maxVal+100);
+        dayPriceAxis.setTickUnit(5);
+        dayPriceAxis.setAnimated(true);
+        dayChart.setAnimated(true);
     }
 
     public XYChart.Series<String, Float> setupMinChart(){
@@ -115,7 +136,7 @@ public class CryptoControl implements Initializable{
                 firstTime+=0.3;
             }
         }
-        series.getData().add(new XYChart.Data<String, Float>(String.valueOf(nextTime),BtcMinute.lastVal));
+//        series.getData().add(new XYChart.Data<String, Float>(String.valueOf(nextTime),BtcMinute.lastVal));
         return series;
     }
 
@@ -145,13 +166,49 @@ public class CryptoControl implements Initializable{
             for(int i=0;i<3;i++){
                 String chartTime=String.valueOf(firstTime);
                 Float value=prices[i];
-                System.out.println(String.format("%-5s %-10f", chartTime, value));
+//                System.out.println(String.format("%-5s %-10f", chartTime, value));
                 series.getData().add(new XYChart.Data<String, Float>(chartTime, value));
                 firstTime+=0.3;
             }
 
         }
         series.getData().add(new XYChart.Data<String, Float>(String.valueOf(nextTime),BtcHour.lastVal));
+        return series;
+    }
+
+    public XYChart.Series<String, Float> setupDayChart(){
+        //XY series to be passed to the chart later
+//        System.out.println("HOUR DATA:");
+        XYChart.Series<String, Float> series = new XYChart.Series<>();
+        ObservableList<BtcDay> values=BtcDay.getDay();
+        float nextTime=0;
+        for(BtcDay bt:values){
+            String time=bt.getTime();
+            float prices[]={bt.getOpen(), bt.getLow(), bt.getHigh(), bt.getClose()};
+
+            //Converting Unix time to Minutes for dsiplay and data plotting
+            int unixHours=parseInt(time);
+            Date date = new java.util.Date(unixHours*1000L);
+            SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd");
+            sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT-8"));
+            String formattedDate = sdf.format(date);
+
+            time=formattedDate;
+
+            int timeToDiv=parseInt(time);       //converstion of the time to a float
+            float firstTime=(float) timeToDiv;  //float casted
+            nextTime=firstTime+1;         //Used to divide the time and plot Low & high
+
+            for(int i=0;i<3;i++){
+                String chartTime=String.valueOf(firstTime);
+                Float value=prices[i];
+                System.out.println(String.format("%-5s %-10f", chartTime, value));
+                series.getData().add(new XYChart.Data<String, Float>(chartTime, value));
+                firstTime+=0.3;
+            }
+
+        }
+//        series.getData().add(new XYChart.Data<String, Float>(String.valueOf(nextTime),BtcHour.lastVal));
         return series;
     }
 
@@ -173,12 +230,26 @@ public class CryptoControl implements Initializable{
         });
     }
 
+    public void drawDayChart(XYChart.Series<String, Float> series){
+        Platform.runLater(()->{
+            //Set the Current time
+            String priceFormat=String.format("$%-10s",String.valueOf(BtcMinute.lastVal));
+            currPriceLabel.setText(priceFormat);
+            dayChart.getData().setAll(series);
+        });
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        BtcMinute.getMinute();
+        BtcHour.getHour();
+        BtcDay.getDay();
         preDrawMin();
         preDrawHour();
         doMinLoad();
         doHourLoad();
+        doDayLoad();
+
     }
 }

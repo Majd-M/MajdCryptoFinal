@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BtcHour {
+public class BtcDay {
     //Properties
     private StringProperty time;
     private FloatProperty open;
@@ -30,7 +30,7 @@ public class BtcHour {
     public static float lastVal;
 
     //Constructor
-    public BtcHour(String time, float open, float low, float high, float close){
+    public BtcDay(String time, float open, float low, float high, float close){
         this.time = new SimpleStringProperty(this, "year");
         this.open = new SimpleFloatProperty(this, "open");
         this.low = new SimpleFloatProperty(this, "low");
@@ -64,8 +64,8 @@ public class BtcHour {
     }
 
     //Method invoked to return BtcMinute objects
-    public static ObservableList<BtcHour> getHour(){
-        String addr = "https://min-api.cryptocompare.com/data/histohour?aggregate=1&e=CCCAGG&extraParams=CryptoCompare&fsym=BTC&limit=10&tryConversion=false&tsym=USD";
+    public static ObservableList<BtcDay> getDay(){
+        String addr = "https://min-api.cryptocompare.com/data/histoday?aggregate=1&e=CCCAGG&extraParams=CryptoCompare&fsym=BTC&limit=10&tryConversion=false&tsym=USD";
 
         try {
             URL address = new URL(addr);
@@ -78,7 +78,7 @@ public class BtcHour {
             //priceComp is used to get the max, min and last values for the chart
             List<Float> priceComp=new ArrayList<>();
             //The Observable list to be returned by the function
-            ObservableList<BtcHour> minValues=FXCollections.observableArrayList();
+            ObservableList<BtcDay> minValues=FXCollections.observableArrayList();
 
             //Iterating through the Json objects
             for(int i=0;i<=10;i++){
@@ -92,7 +92,7 @@ public class BtcHour {
                 Float close=ob.get("close").getAsFloat();
 
                 //Adding values to the Observable lIst
-                minValues.add(new BtcHour(time,open,low,high,close));
+                minValues.add(new BtcDay(time,open,low,high,close));
 
                 //Adding Values to the price comparer list
                 priceComp.add(open);
@@ -103,7 +103,7 @@ public class BtcHour {
                 //for Debugging
                 String fromatted=String.format("Time:%-15s Open:%-15f Low:%-15f High:%-15f Close:%-15f ",
                         time,open,low,high,close);
-//                System.out.println(fromatted);
+                System.out.println(fromatted);
             }
             //Assigning the limits for use in the chart and ranging
             minVal=Collections.min(priceComp);
