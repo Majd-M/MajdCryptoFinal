@@ -184,7 +184,6 @@ public class CryptoControl implements Initializable{
 
     public XYChart.Series<String, Float> setupDayChart(){
         //XY series to be passed to the chart later
-//        System.out.println("HOUR DATA:");
         XYChart.Series<String, Float> series = new XYChart.Series<>();
         ObservableList<BtcDay> values=BtcDay.getDay();
         NumberFormat formatter=new DecimalFormat("#0.0");
@@ -202,14 +201,14 @@ public class CryptoControl implements Initializable{
 
             time=formattedDate;
 
-            int timeToDiv=parseInt(time);       //converstion of the time to a float
+            int timeToDiv=parseInt(time);       //conversion of the time to a float
             float firstTime=(float) timeToDiv;  //float casted
             nextTime=firstTime+1;         //Used to divide the time and plot Low & high
 
             for(int i=0;i<3;i++){
                 String chartTime=String.valueOf(formatter.format(firstTime));
                 Float value=prices[i];
-                System.out.println(String.format("%-5s %-10f", chartTime, value));
+//                System.out.println(String.format("%-5s %-10f", chartTime, value));
                 series.getData().add(new XYChart.Data<String, Float>(chartTime, value));
                 firstTime+=0.1;
             }

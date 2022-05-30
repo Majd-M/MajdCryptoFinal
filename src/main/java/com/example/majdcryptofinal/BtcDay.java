@@ -103,7 +103,7 @@ public class BtcDay {
                 //for Debugging
                 String fromatted=String.format("Time:%-15s Open:%-15f Low:%-15f High:%-15f Close:%-15f ",
                         time,open,low,high,close);
-                System.out.println(fromatted);
+//                System.out.println(fromatted);
             }
             //Assigning the limits for use in the chart and ranging
             minVal=Collections.min(priceComp);
